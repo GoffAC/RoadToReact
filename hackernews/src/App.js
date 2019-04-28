@@ -19,19 +19,60 @@ const orList = [
     objectID: 1,
   }
 ];
+
+const isSearched = (keyWord) => (item) => item.title.toLowerCase().includes(keyWord.toLowerCase())
  
  class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { list:  orList };
+    this.state = {  
+      list:  orList,
+      searchTerm: ''};
+    this.onDismiss = this.onDismiss.bind(this);
   }
 
+  onDismiss(id){
+    const updatedList = this.state.list.filter(item => item.objectID !== id);
+    this.setState({list: updatedList});
+  }
 
+  onSearchChange = (event) => {
+    this.setState({searchTerm: event.target.value})
+
+  }
+
+  render(){
+    const {searchTerm, list} = this.state;
+    return (
+      <div className="App">
+        <Search keyWord={searchTerm} onChange={this.onSearchChange} />
+        <Table  list={list} keyWord={searchTerm} onDismiss={this.onDismiss}/>
+      </div>
+    );
+  }
+}
+
+
+
+class Search extends Component {
   render() {
-    return ( 
-      <div className="App" >
-        {this.state.list.map(item =>
+    const {value, onChange} = this.props;
+    return(
+      <form>
+        <input type="type" value={value} onChange={onChange} />
+      </form>
+    )
+  }
+}
+
+
+class Table extends Component {
+  render() {
+    const {list, keyWord, onDismiss} = this.props;
+    return(
+      <div className='Table'>
+       { list.filter(isSearched(keyWord)).map(item =>
           <div key={item.objectID}>
           <span>
             <a href={item.url}>{item.title} </a>
@@ -40,13 +81,22 @@ const orList = [
           <span>{item.num_comments} </span>
           <span>{item.points} </span>
           <span>
-            <button onClick={() => this.onDismiss(item.objectID)} type="button">Dismiss</button>
+          <Button onClick={() => onDismiss(item.objectID)}>Dismiss</Button>
           </span> 
           </div>
         )}
       </div>
     )
   }
- }
+}
+
+class Button extends Component {
+  render(){
+    const {onClick, children} = this.props;
+    return(
+      <button onlick={onClick} type='button'>{children}</button>
+    )
+  }
+}
 
 export default App;
