@@ -55,48 +55,32 @@ const isSearched = (keyWord) => (item) => item.title.toLowerCase().includes(keyW
 
 
 
-class Search extends Component {
-  render() {
-    const {value, onChange} = this.props;
-    return(
-      <form>
-        <input type="type" value={value} onChange={onChange} />
-      </form>
-    )
-  }
-}
+const Search = ({value, onChange}) =>
+  <form>
+    <input type="type" value={value} onChange={onChange} />
+  </form>;
 
 
-class Table extends Component {
-  render() {
-    const {list, keyWord, onDismiss} = this.props;
-    return(
-      <div className='Table'>
-       { list.filter(isSearched(keyWord)).map(item =>
-          <div key={item.objectID}>
-          <span>
-            <a href={item.url}>{item.title} </a>
-          </span>
-          <span>{item.author} </span>
-          <span>{item.num_comments} </span>
-          <span>{item.points} </span>
-          <span>
-          <Button onClick={() => onDismiss(item.objectID)}>Dismiss</Button>
-          </span> 
-          </div>
-        )}
+const Table = ({list, keyWord, onDismiss}) => 
+  <div className='Table'>
+    { list.filter(isSearched(keyWord)).map(item =>
+      <div key={item.objectID}>
+      <span>
+        <a href={item.url}>{item.title} </a>
+      </span>
+      <span>{item.author} </span>
+      <span>{item.num_comments} </span>
+      <span>{item.points} </span>
+      <span>
+      <Button onClick={() => onDismiss(item.objectID)}>Dismiss</Button>
+      </span> 
       </div>
-    )
-  }
-}
+    )}
+  </div>;
 
-class Button extends Component {
-  render(){
-    const {onClick, children} = this.props;
-    return(
-      <button onlick={onClick} type='button'>{children}</button>
-    )
-  }
-}
+
+const Button = ({onClick, children}) => 
+  <button onClick={onClick} type='button'>{children}</button>;
+
 
 export default App;
